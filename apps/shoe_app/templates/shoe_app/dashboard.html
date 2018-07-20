@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shoe sale</title>
+</head>
+<body>
+    <h1>Shoe Sale</h1>
+    <a href="/shoes">dashboard</a>
+    <a href="/logout">logout</a>
+
+    <form action="/sell_shoes" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="name"><br>
+        <input type="number" name="price" placeholder="price" step="0.01" min="1.00"><br>
+        <input type="submit" value="Sell Shoes">
+    </form>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3>Shoes Bought</h3>
+    <table border=1>
+        <tr>
+            <th>Product</th>
+            <th>Date Bought</th>
+            <th>Seller</th>
+            <th>Price</th>
+        </tr>
+        {% for purchase in bought_shoes %}
+            <tr>
+                <td>{{ purchase.shoe.name }}</td>
+                <td>{{ purchase.shoe.updated_at.date }}</td>
+                <td>{{ purchase.shoe.seller.first_name }} {{ purchase.shoe.seller.last_name }}</td>
+                <td>{{ purchase.shoe.price }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p>Total: {{spent}}</p>
+
+    <h3>Shoes Sold</h3>
+    <table border=1>
+        <tr>
+            <th>Product</th>
+            <th>Date Bought</th>
+            <th>Buyer</th>
+            <th>Price</th>
+        </tr>
+        {% for shoe in sold_shoes %}
+            {% if shoe.bought %}
+                <tr>
+                    <td>{{shoe.name}}</td>
+                    <td>{{shoe.updated_at.date}}</td>
+                    <td>{{shoe.purchases.all.0.user.first_name}} {{shoe.purchases.all.0.user.last_name}}</td>
+                    <td>{{shoe.price}}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+    <p>Total: {{gained}}</p>
+
+    <h3>Shoes Available</h3>
+    <table border=1>
+        <tr>
+            <th>Product</th>
+            <th>Date Bought</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+        {% for shoe in sold_shoes %}
+            {% if not shoe.bought %}
+                <tr>
+                    <td>{{shoe.name}}</td>
+                    <td>{{shoe.created_at.date}}</td>
+                    <td>{{shoe.price}}</td>
+                    <td><a href="/remove/{{shoe.id}}">remove from sale</a></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+</body>
+</html>

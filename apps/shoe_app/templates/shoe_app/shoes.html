@@ -8,7 +8,29 @@
 </head>
 <body>
     <h1>Shoe Sale</h1>
+    <a href="/dashboard/{{ request.session.user_id }}">dashboard</a>
     <a href="/logout">logout</a>
     <h4>User id {{ request.session.user_id }}</h4>
+
+    <!-- <p>{{ shoes }}</p> -->
+
+    <table border=1>
+        <tr>
+            <th>Product</th>
+            <th>Seller</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+        {% for shoe in shoes %}
+            <tr>
+                <td>{{ shoe.name }}</td>
+                <td>{{ shoe.seller.first_name }} {{ shoe.seller.last_name }}</td>
+                <td>{{ shoe.created_at.date }}</td>
+                <td>${{ shoe.price }}</td>
+                <td><a href="/buy_shoes/{{shoe.id}}">[Buy]</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

@@ -89,3 +89,52 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
+
+class ShoeManager(models.Manager):
+    def sell(self, form_data, seller_id):
+        # print(form_data)
+        errors = []
+
+        if len(form_data['name']) < 6:
+            errors.append("Shoe name must be 6 characters or more")
+
+        if len(form_data['price']) < 1:
+             errors.append("Shoe price is required")
+        elif float(form_data['price']) < 1.0:
+            errors.append("Shoe price must be at least $1.00")
+
+        if len(errors) > 0:
+            return (False, errors)
+        else:
+            shoe = Shoe.objects.create(
+                name = form_data['name'],
+                price = form_data['price'],
+                seller_id = seller_id,
+                bought = False
+            )
+            return (True, shoe)
+
+    def buy(self, shoe_id, buyer_id):
+        shoe = Shoe.objects.get(id=shoe_id)
+        shoe.bought = True
+        shoe.save()
+
+        Purchase.objects.create(
+            shoe_id = shoe_id,
+            user_id = buyer_id 
+        )
+        return True
+
+class Shoe(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.CharField(max_length=255)
+    seller = models.ForeignKey(User, related_name="shoes", on_delete="cascade")
+    bought = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ShoeManager()
+
+class Purchase(models.Model):
+    shoe = models.ForeignKey(Shoe, related_name="purchases", on_delete="cascade")
+    user = models.ForeignKey(User, related_name="purchases", on_delete="cascade")

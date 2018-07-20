@@ -5,32 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shoe Sale</title>
+    <style>
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+        }
+        .box {
+            width: 395px;
+            height: 400px;
+            border: 1px solid #000;
+            display: inline-block;
+            vertical-align: top;
+            padding: 50px;
+        }
+    </style>
 </head>
 <body>
-    <h3>Register</h3>
-    <form action="/register" method="post">
-        {% csrf_token %}
-        <input type="text" name="first_name" placeholder="first name"><br>
-        <input type="text" name="last_name" placeholder="last name"><br>
-        <input type="text" name="email" placeholder="email"><br>
-        <input type="password" name="password" placeholder="password"><br>
-        <input type="password" name="confirm" placeholder="confirm password"><br>
-        <input type="submit" value="Register">
-    </form>
-    <h3>Login</h3>
-    <form action="/login" method="post">
-        {% csrf_token %}
-        <input type="text" name="email" placeholder="email"><br>
-        <input type="password" name="password" placeholder="password"><br>
-        <input type="submit" value="Login">
-    </form>
+    <div class="container">
+        <div class="box">
+            <h3>Register</h3>
+            <form action="/register" method="post">
+                {% csrf_token %}
+                <input type="text" name="first_name" placeholder="first name"><br>
+                <input type="text" name="last_name" placeholder="last name"><br>
+                <input type="text" name="email" placeholder="email"><br>
+                <input type="password" name="password" placeholder="password"><br>
+                <input type="password" name="confirm" placeholder="confirm password"><br>
+                <input type="submit" value="Register">
+            </form>
+        </div>
 
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        <div class="box">
+            <h3>Login</h3>
+            <form action="/login" method="post">
+                {% csrf_token %}
+                <input type="text" name="email" placeholder="email"><br>
+                <input type="password" name="password" placeholder="password"><br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>  
 </body>
 </html>
